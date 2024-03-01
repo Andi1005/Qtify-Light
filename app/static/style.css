@@ -1,0 +1,72 @@
+#index {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center; /* alt.: stretch */
+}
+
+#index-text {
+    font-size: 1.2rem;
+}
+
+#index-button {
+    padding: 10px;
+}
+
+#room {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center; /* alt.: stretch */
+}
+
+#search {
+    
+}
+
+.searchbar {
+    border-radius: 5px;
+}
+
+.searchbar.search-button {
+    border: none;
+    outline: none;
+    background-color: none;
+}
+
+.searchbar.search-textbox {
+    border: none;
+}
+
+#search-results {
+    border-radius: 5px;
+}
+
+#search-results.show-results {
+    height: 300px;
+}
+
+#search-results.hide-results {
+    height: 0px;
+}
+
+.search-result {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-result.song-img {
+    height: 100%;
+}
+
+.search-result.song-name {
+    font-size: 1.1em;
+}
+
+.search-result.song-artist {
+
+}
+
+.search-result.add-song-button {
+    margin-right: 0px;
+}

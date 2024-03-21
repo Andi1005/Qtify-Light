@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QTfiy light</title>
     <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body id="index">
-    <div id="index-text">
-        Wilkommen bei QTify! <br/>
-        Klicke unten, um dich bei Spotify anzumelden und einen neuen Raum zu erstelln.
-    </div>
-    <button id="index-button">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="message {{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <h1>Wilkommen bei QTify!</h1>
+    <p id="index-text">
+        Mit QTify kannst du Songs in die Warteschlange packen ohne selbst das Handy, auf Musik gemacht wird, in der Hand zu haben. <br/>
+        Klicke einfach unten, um dich bei Spotify anzumelden und einen neuen Raum zu erstellen.
+    </p>
+    <a id="create-btn" href="/auth">
         Raum erstellen
-    </button>
+    </a>
 </body>
 </html>

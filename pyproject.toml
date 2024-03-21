@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "QTify"
+version = "0.0.1"
+authors = [
+  { name="Andreas Hars", email="andi.hars@online.de" },
+]
+description = "A Flask webapp to easily add songs to the Spotify queue"
+readme = "README.md"
+requires-python = ">=3.12.1"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Website = "https://qtify.eu.pythonanywhere.com"
+Source = "https://github.com/Andi1005/Qtify-Light"

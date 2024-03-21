@@ -1,0 +1,16 @@
+<!-- This code block is dynamicly inserted into #search-result in room.html-->
+
+{% for track in tracks %}
+<div class="search-result">
+    <span class="track-info">
+    <img class="track-img" src="{{ track.image }}">
+        <span>
+            <div class="track-name">{{ track.name }}</div>
+            <div class="track-artist">{{ track.artist }}</div>
+        </span>
+    </span>
+    <button class="add-track-btn material-symbols-rounded" name="track-uri" value="{{ track.uri }}">
+        Add
+    </button>
+</div>
+{% endfor %}

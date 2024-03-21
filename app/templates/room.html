@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body id="room">
-    <form id="search">
-        <div class="searchbar">
-            <button class="search-button">
-                search
-            </button>
-            <input class="search-textbox">
-        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="message {{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <nav>
+        <img class="spotify-logo" src="{{ url_for('static', filename='spotify-logo/Spotify_Logo_RGB_White.png') }}">
+        <a href="{{ url_for('views.join', room_id=room_id) }}" id="share-btn">
+            <span class="material-symbols-rounded">QR_Code</span>
+            <span>Link teilen</span>
+        </a>
+    </nav>
+    <div id="searchbar">
+        <button id="search-btn" class="material-symbols-rounded" onclick="search()">
+            Search
+        </button>
+        <input id="search-textbox" oninput="search()" placeholder="Hier kannst du dach Songs zum Hinzufügen suchen">
+    </div>
+    <form id="search" method="post">
         <div id="search-results" class="show-results">
-            <div class="search-result">
-                <img class="song-img">
-                <span>
-                    <span class="song-name">Numb</span>
-                    <span class="song-artist">Linkenpark</span>
-                </span>
-                <button class="add-song-button">add to queue</button>
-            </div>
+            <!-- search results get generated here by ajax-search.js (see search-result.html) -->
         </div>
     </form>
+    <script src="static/ajax-search.js"></script> 
 </body>
-</html>
+</html> 

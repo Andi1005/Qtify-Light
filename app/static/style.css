@@ -15,12 +15,12 @@ body {
     --accent-color: #8ebbff;
     --text-color: #f4f5fc;
     --secondary-color: #CCCCCC;
-    
+
     --default-border-radius: 15px;
 
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.1rem;
-    
+
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@ body {
     padding: 60px 10vw 35px 10vw;
     margin: 0;
     box-sizing: border-box;
-    
+
     background-color: var(--bg-color);
     align-content: first baseline;
 }
@@ -82,16 +82,17 @@ nav {
 #share-btn {
     display: flex;
     align-items: center;
-    
+
     border-radius: var(--default-border-radius);
     padding: 8px 15px;
-    
+
     text-decoration: none;
     color: black;
     background-color: var(--accent-color);
 }
 
 #searchbar {
+    margin: 0 10px;
     display: flex;
     width: 100%;
     border-radius: 40px;

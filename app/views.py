@@ -1,4 +1,3 @@
-from urllib.parse import urlencode
 import os
 
 import flask
@@ -20,7 +19,7 @@ def index():
 @auth.auth_required
 def room(room_id):
     """'/<room_id>' endpoint. You can search for songs and add them to the queue.
-    
+
     If the request method is POST, the view validates the track-uri, checks if it
     is already in the queue and, if not, adds the track to the queue.
     In the case of an error, the user is redirected to the index page with an error
@@ -36,22 +35,22 @@ def room(room_id):
             flask.abort(400)
 
         response = requests.get(
-            "https://api.spotify.com/v1/me/player/queue", 
+            "https://api.spotify.com/v1/me/player/queue",
             headers={"Authorization": "Bearer " + flask.g.room.access_token,},
             )
-                
+
         if response.status_code >= 400:
             flask.current_app.logger.error(
                 f"Error while requesting queue: {response.content}")
             flask.flash(
                 "Es ist ein Fehler mit Spotify aufgetreten (Error 500)",
                 category="error")
-        
+
         elif response.status_code == 200:
             response_data = response.json()
             for track in response_data["queue"]:
                 if track["uri"] == track_uri:
-                    flask.flash("Dieser Song ist schon in der Warteschlange.", 
+                    flask.flash("Dieser Song ist schon in der Warteschlange.",
                         category="info")
                     return flask.render_template("room.html")
 
@@ -70,7 +69,7 @@ def room(room_id):
             flask.current_app.logger.info(f"Added track to queue ({track_uri})")
             flask.flash("Song zur Warteschlange hinzugefügt.",
                 category="info")
-        
+
         elif response.status_code >= 400:
             return response.content
 
@@ -93,7 +92,7 @@ def search(room_id):
         "limit": LIMIT,
         "offset": LIMIT * page,
     }
-        
+
     response = requests.get(
         "https://api.spotify.com/v1/search",
         params=params,
@@ -101,12 +100,11 @@ def search(room_id):
     )
 
     if response.status_code >= 400:
-        print(response.content)
-        flask.flash(
-            "Es ist ein Fehler bei der Kommuinikation mit Spotify aufgetreten",
-            category="error")
-        flask.abort(500)
-    
+        print(flask.g.room.access_token)
+        print(type(flask.g.room.access_token))
+        flask.current_app.logger.error(response.content)
+        return "Communication with Spotify failed", 500
+
     elif response.status_code == 200:
         response_data = response.json()
         search_result = []
@@ -129,7 +127,7 @@ def join(room_id):
     if room.qr_code_path is None:
         filename = f"qrcode_{room_id}.png"
         qr_code_path = os.path.join(flask.current_app.instance_path, "qr-codes", filename)
-        
+
         qr_code = qrcode.make(url)
         qr_code.save(qr_code_path)
 

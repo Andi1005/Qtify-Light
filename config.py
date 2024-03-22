@@ -4,8 +4,8 @@ class BaseConfig:
     SECRET_KEY = ""
 
     AUTH_SCOPE = [
-        "user-read-playback-state", 
-        "user-modify-playback-state", 
+        "user-read-playback-state",
+        "user-modify-playback-state",
         "user-read-currently-playing",
     ]
 
@@ -29,7 +29,7 @@ class Debug(BaseConfig):
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=4)
-    
+
 class Production(BaseConfig):
     SECRET_KEY = "Change in Production"
     DEBUG = False
@@ -39,8 +39,8 @@ class Production(BaseConfig):
     SERVER_NAME = "qtify.eu.pythonanywhere.com"
     APPLICATION_ROOT = "/"
 
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://qtify:password@qtify.mysql.eu.pythonanywhere-services.com/qtify$database"
-    #SQLALCHEMY_DATABASE_URI = "mysql:///" + os.path.join(INSTANCE_PATH, "database.mysql") # without db driver
+    _DATABASE_PW = "Wg&bQ$GCfu4Fw't"
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://QTify:{_DATABASE_PW}@QTify.mysql.eu.pythonanywhere-services.com/QTify$default"
 
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
     CLIENT_SECRET = "3a7cad52bf8440bc931f4a972a3cdf10"

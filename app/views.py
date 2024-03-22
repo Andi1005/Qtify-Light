@@ -10,10 +10,12 @@ bp = flask.Blueprint("views", __name__)
 
 # For the "/auth" and "/auch/callback" route see auth.py
 
+
 @bp.route("/")
 def index():
     """Root endpoint with a short explanation and link to create a new room."""
     return flask.render_template("index.html")
+
 
 @bp.route("/<room_id>", methods=["GET", "POST"])
 @auth.auth_required
@@ -36,44 +38,53 @@ def room(room_id):
 
         response = requests.get(
             "https://api.spotify.com/v1/me/player/queue",
-            headers={"Authorization": "Bearer " + flask.g.room.access_token,},
-            )
+            headers={
+                "Authorization": "Bearer " + flask.g.room.access_token,
+            },
+        )
 
         if response.status_code >= 400:
             flask.current_app.logger.error(
-                f"Error while requesting queue: {response.content}")
+                f"Error while requesting queue: {response.content}"
+            )
             flask.flash(
                 "Es ist ein Fehler mit Spotify aufgetreten (Error 500)",
-                category="error")
+                category="error",
+            )
 
         elif response.status_code == 200:
             response_data = response.json()
             for track in response_data["queue"]:
                 if track["uri"] == track_uri:
-                    flask.flash("Dieser Song ist schon in der Warteschlange.",
-                        category="info")
+                    flask.flash(
+                        "Dieser Song ist schon in der Warteschlange.", category="info"
+                    )
                     return flask.render_template("room.html")
 
         response = requests.post(
             "https://api.spotify.com/v1/me/player/queue",
-            params={"uri": track_uri,},
-            headers={"Authorization": "Bearer " + flask.g.room.access_token,},
+            params={
+                "uri": track_uri,
+            },
+            headers={
+                "Authorization": "Bearer " + flask.g.room.access_token,
+            },
         )
 
         if response.status_code == 404:
             flask.flash(
-                "Es wurde kein Gerät gefunden, dass Spotify abspielt.",
-                category="error")
+                "Es wurde kein Gerät gefunden, dass Spotify abspielt.", category="error"
+            )
 
         elif response.status_code == 204:
             flask.current_app.logger.info(f"Added track to queue ({track_uri})")
-            flask.flash("Song zur Warteschlange hinzugefügt.",
-                category="info")
+            flask.flash("Song zur Warteschlange hinzugefügt.", category="info")
 
         elif response.status_code >= 400:
             return response.content
 
     return flask.render_template("room.html", room_id=room_id)
+
 
 @bp.route("/<room_id>/search")
 @auth.auth_required
@@ -96,7 +107,9 @@ def search(room_id):
     response = requests.get(
         "https://api.spotify.com/v1/search",
         params=params,
-        headers={"Authorization": "Bearer " + flask.g.room.access_token,},
+        headers={
+            "Authorization": "Bearer " + flask.g.room.access_token,
+        },
     )
 
     if response.status_code >= 400:
@@ -109,14 +122,19 @@ def search(room_id):
         response_data = response.json()
         search_result = []
         for track in response_data["tracks"]["items"]:
-            search_result.append({
-                "uri": track["uri"],
-                "name": track["name"],
-                "artist": ", ".join(artist["name"] for artist in track["artists"]),
-                "image": track["album"]["images"][-1]["url"] # Url to the image with the lowest resolution
-            })
+            search_result.append(
+                {
+                    "uri": track["uri"],
+                    "name": track["name"],
+                    "artist": ", ".join(artist["name"] for artist in track["artists"]),
+                    "image": track["album"]["images"][-1][
+                        "url"
+                    ],  # Url to the image with the lowest resolution
+                }
+            )
 
     return flask.render_template("search-result.html", tracks=search_result)
+
 
 @bp.route("/<room_id>/join")
 @auth.auth_required
@@ -126,7 +144,9 @@ def join(room_id):
     room = models.Room.query.get(room_id)
     if room.qr_code_path is None:
         filename = f"qrcode_{room_id}.png"
-        qr_code_path = os.path.join(flask.current_app.instance_path, "qr-codes", filename)
+        qr_code_path = os.path.join(
+            flask.current_app.instance_path, "qr-codes", filename
+        )
 
         qr_code = qrcode.make(url)
         qr_code.save(qr_code_path)
@@ -136,8 +156,8 @@ def join(room_id):
 
     return flask.render_template("join.html", room_id=room_id)
 
+
 @bp.route("/qr-code/<room_id>")
 @auth.auth_required
 def qr_code(room_id):
     return flask.send_file(flask.g.room.qr_code_path, mimetype="image/png")
-

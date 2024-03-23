@@ -42,7 +42,8 @@ def auth_required(func):
         if room_id is None:
             flask.flash(
                 "Es wurde keine room id vom Client gesendet. (Error 400)",
-                category="error")
+                category="error",
+            )
             return flask.redirect(flask.url_for("views.index"))
 
         room = models.Room.query.filter_by(id=room_id).first()
@@ -50,14 +51,13 @@ def auth_required(func):
             current_app.logger.info(f"Room not found with ID {room_id}.")
             flask.flash(
                 "Der Raum wurde nicht auf dem Server gefunden. (Error 404)",
-                category="error")
+                category="error",
+            )
             return flask.redirect(flask.url_for("views.index"))
 
         if room.expires_at < datetime.datetime.now():
             current_app.logger.info(f"Tried to use expired room {room}.")
-            flask.flash(
-                "Der Raum ist abgelaufen (Error 410)",
-                category="error")
+            flask.flash("Der Raum ist abgelaufen (Error 410)", category="error")
             return flask.redirect(flask.url_for("views.index"))
 
         if room.token_expires_at < datetime.datetime.now():
@@ -67,6 +67,7 @@ def auth_required(func):
         flask.g.room = room
 
         return func(*args, **kwargs)
+
     return decorated_function
 
 
@@ -81,11 +82,12 @@ def auth():
         "client_id": current_app.config["CLIENT_ID"],
         "response_type": "code",
         "redirect_uri": flask.url_for("auth.callback", _external=True),
-		"state": state,
+        "state": state,
         "scope": " ".join(current_app.config["AUTH_SCOPE"]),
         "show_dialog": current_app.config["AUTH_SHOW_DIALOG"],
     }
     return flask.redirect(url + urlencode(params))
+
 
 @bp.route("/auth/callback")
 def callback():
@@ -125,11 +127,13 @@ def callback():
         return flask.redirect(flask.url_for("views.index"))
 
     url = "https://accounts.spotify.com/api/token"
-    client_auth = current_app.config["CLIENT_ID"] + ":" + current_app.config["CLIENT_SECRET"]
+    client_auth = (
+        current_app.config["CLIENT_ID"] + ":" + current_app.config["CLIENT_SECRET"]
+    )
     client_auth = base64.b64encode(client_auth.encode("ascii")).decode("ascii")
     headers = {
         "Authorization": "Basic " + client_auth,
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
     }
     body = {
         "code": code,
@@ -139,7 +143,9 @@ def callback():
 
     response = requests.post(url, headers=headers, data=body)
     if not response.status_code == 200:
-        current_app.logger.info(f"Authorisation failed while requesting access token (From Spotify: {response.content})")
+        current_app.logger.info(
+            f"Authorisation failed while requesting access token (From Spotify: {response.content})"
+        )
         flask.flash("Autorisierung fehlgeschlagen (Error 403)")
         return flask.redirect(flask.url_for("views.index"))
 
@@ -156,13 +162,15 @@ def callback():
 
     current_app.logger.info(f"New room created {new_room}")
 
-    return flask.redirect(flask.url_for("views.room", room_id = new_room.id))
+    return flask.redirect(flask.url_for("views.room", room_id=new_room.id))
 
 
 def refresh_access_token(room: models.Room) -> None | Exception:
     """Requests a new access token with the refresh token from the Room model."""
 
-    client_auth = current_app.config["CLIENT_ID"] + ":" + current_app.config["CLIENT_SECRET"]
+    client_auth = (
+        current_app.config["CLIENT_ID"] + ":" + current_app.config["CLIENT_SECRET"]
+    )
     client_auth = base64.b64encode(client_auth.encode("ascii")).decode("ascii")
     headers = {
         "Authorization": "Basic " + client_auth,
@@ -181,14 +189,20 @@ def refresh_access_token(room: models.Room) -> None | Exception:
     )
 
     if not response.status_code == 200:
-        current_app.logger.error(f"Unexpected response while refreshing access token: {response.content}")
-        raise ValueError(f"Unexpected response while refreshing access token: {response.status_code}")
+        current_app.logger.error(
+            f"Unexpected response while refreshing access token: {response.content}"
+        )
+        raise ValueError(
+            f"Unexpected response while refreshing access token: {response.status_code}"
+        )
 
     response_data = response.json()
     room.access_token = response_data["access_token"]
     room.refresh_token = response_data["refresh_token"]
     expires_in = datetime.timedelta(response_data["expires_in"])
-    room.token_expires_at = datetime.datetime.now() + datetime.timedelta(seconds=expires_in)
+    room.token_expires_at = datetime.datetime.now() + datetime.timedelta(
+        seconds=expires_in
+    )
 
     models.db.session.commit()
 

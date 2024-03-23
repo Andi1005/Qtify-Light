@@ -1,5 +1,6 @@
 import os, datetime
 
+
 class BaseConfig:
     SECRET_KEY = ""
 
@@ -8,6 +9,7 @@ class BaseConfig:
         "user-modify-playback-state",
         "user-read-currently-playing",
     ]
+
 
 class Debug(BaseConfig):
     # Flask
@@ -29,6 +31,7 @@ class Debug(BaseConfig):
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=4)
+
 
 class Production(BaseConfig):
     SECRET_KEY = "Change in Production"

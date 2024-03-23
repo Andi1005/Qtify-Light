@@ -7,6 +7,7 @@ import click
 random.seed()
 db = SQLAlchemy()
 
+
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     access_token = db.Column(db.String(256), nullable=False)
@@ -23,7 +24,9 @@ class Room(db.Model):
             if existing_room is None:
                 break
 
-        token_expires_at = datetime.datetime.now() + datetime.timedelta(seconds=token_expires_in)
+        token_expires_at = datetime.datetime.now() + datetime.timedelta(
+            seconds=token_expires_in
+        )
         super().__init__(
             id=id,
             access_token=access_token,
@@ -35,9 +38,10 @@ class Room(db.Model):
     def __repr__(self):
         return f"<Room {self.id}>"
 
+
 @click.command("tidy-db")
 def tidy_db():
-    """Goes thru every Room in the database and deletes expired ones.
+    """Goes through every Room in the database and deletes expired ones.
     This script is ment to run as a scheduled task.
     """
 
@@ -50,6 +54,7 @@ def tidy_db():
 
     db.session.commit()
     click.echo(f"{counter} rows deleted.")
+
 
 @click.command("create-db")
 @click.option("-d", "--delete", "path")

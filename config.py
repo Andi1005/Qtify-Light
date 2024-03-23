@@ -25,7 +25,7 @@ class Debug(BaseConfig):
 
     # Spotify Authorization
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
-    CLIENT_SECRET = "3a7cad52bf8440bc931f4a972a3cdf10"
+    CLIENT_SECRET = "Replace with client secret"
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=4)
@@ -43,7 +43,7 @@ class Production(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://QTify:{_DATABASE_PW}@QTify.mysql.eu.pythonanywhere-services.com/QTify$default"
 
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
-    CLIENT_SECRET = "3a7cad52bf8440bc931f4a972a3cdf10"
+    CLIENT_SECRET = "Replace wit hclinet secret"
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=12)

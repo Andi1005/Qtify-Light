@@ -7,7 +7,7 @@ import config
 
 def create_app():
     app = flask.Flask(__name__)
-    app.config.from_object(config.Debug)
+    app.config.from_object(config.Production)
 
     try:
         os.makedirs(app.instance_path)
@@ -27,5 +27,4 @@ def create_app():
 
     return app
 
-if __name__ == "__main__":
-    app = create_app()
+app = create_app()

@@ -59,7 +59,7 @@ def room(room_id):
                     flask.flash(
                         "Dieser Song ist schon in der Warteschlange.", category="info"
                     )
-                    return flask.render_template("room.html")
+                    return flask.render_template("room.html", room_id=room_id)
 
         response = requests.post(
             "https://api.spotify.com/v1/me/player/queue",

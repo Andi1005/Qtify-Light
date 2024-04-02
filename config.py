@@ -22,12 +22,11 @@ class Debug(BaseConfig):
     APPLICATION_ROOT = "/"
 
     # SQLAlchemy
-    INSTANCE_PATH = r"C:\Users\Andi\Code\Qtify-Light\instance"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(INSTANCE_PATH, "database.db")
+    SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 
     # Spotify Authorization
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
-    CLIENT_SECRET = "Replace with client secret"
+    CLIENT_SECRET = "3ee2851081c244509c242de6892c738b"
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=4)

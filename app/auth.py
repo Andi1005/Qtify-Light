@@ -91,11 +91,11 @@ def auth():
 
 @bp.route("/auth/callback")
 def callback():
-    """'/auth/callback' endpoint. Request an access token and creates a new room.
+    """'/auth/callback' endpoint. Requests an access token and creates a new room.
 
     This endpoint is only to be used by the Spotify auth services as
     callback from the auth view.
-    If the user authorized the application, this function requests a access token
+    If the user authorized the application, this function requests an access token
     from Spotify. This access token is saved in a new 'Room' database-entry with the
     request token and expiration date. If the authorization failed,
     the user is directed back to the index page (with an error message).
@@ -146,6 +146,7 @@ def callback():
         current_app.logger.info(
             f"Authorisation failed while requesting access token (From Spotify: {response.content})"
         )
+        
         flask.flash("Autorisierung fehlgeschlagen (Error 403)")
         return flask.redirect(flask.url_for("views.index"))
 

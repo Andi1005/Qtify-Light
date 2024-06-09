@@ -34,7 +34,7 @@ class Debug(BaseConfig):
 
 
 class Production(BaseConfig):
-    SECRET_KEY = "Change in Production"
+    SECRET_KEY = "a4877528e4a96e876e63acd935e32864640e6c5279a7510f60253a7f5ef06daf"
     DEBUG = False
     TESTING = False
 
@@ -46,7 +46,7 @@ class Production(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://QTify:{_DATABASE_PW}@QTify.mysql.eu.pythonanywhere-services.com/QTify$default"
 
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
-    CLIENT_SECRET = "Replace wit hclinet secret"
+    CLIENT_SECRET = "3ee2851081c244509c242de6892c738b"
     AUTH_SHOW_DIALOG = "true"
 
     ROOM_LIFESPAN = datetime.timedelta(hours=12)

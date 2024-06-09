@@ -1,6 +1,7 @@
 import os
 
 import flask
+from sqlalchemy.exc import OperationalError
 import requests
 import qrcode
 
@@ -161,3 +162,27 @@ def join(room_id):
 @auth.auth_required
 def qr_code(room_id):
     return flask.send_file(flask.g.room.qr_code_path, mimetype="image/png")
+
+@bp.route("/test/<key>")
+def test(key):
+    """Endpoint for testing."""
+    # Only allow access if the Secret Key is known
+    if not key == flask.current_app.config["SECRET_KEY"]:
+        flask.abort(403)
+
+    # Tests here:
+
+
+    # If not already, an empty respnse is returned
+    return "Test"
+
+@bp.errorhandler(OperationalError)
+def handle_database_error(e):
+    flask.flash("Etwas ist schiefgelaufen. Bitte versuche es erneut. (Error 503)", "error")
+    flask.current_app.logger.warning("Encountered Operational Error. From DB Api:\n" + e)
+
+    try:
+        return flask.redirect(flask.url_for('views.room', room_id=flask.g.room_id))
+    
+    except OperationalError:
+        return flask.render_template("index.html")

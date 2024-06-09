@@ -14,7 +14,7 @@
             <span>Zurück</span>
         </a>
     </nav>
-    <p>Scanne diesen QR-Code um auf einem anderen Gerät songs in die Warteschlange zu machen.</p>
+    <p>Scanne diesen QR-Code um auf einem anderen Gerät Songs in die Warteschlange zu machen.</p>
     <img src="{{ url_for('views.qr_code', room_id=room_id) }}">
     <p>Oder navigiere auf die URL unten:</p>
     <a href="{{ url_for('views.room', room_id=room_id, _external=True) }}">{{ url_for('views.room', room_id=room_id, _external=True) }}</a>

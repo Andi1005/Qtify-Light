@@ -57,14 +57,6 @@ def tidy_db():
 
 
 @click.command("create-db")
-@click.option("-d", "--delete", "path")
-def create_db(path):
+def create_db():
     """Initiates the database"""
-
-    try:
-        if path:
-            os.remove(path)
-    except OSError:
-        click.echo("Path does not exist.")
-
     db.create_all()

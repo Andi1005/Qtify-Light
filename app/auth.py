@@ -45,7 +45,8 @@ def auth_required(func):
                 category="error",
             )
             return flask.redirect(flask.url_for("views.index"))
-
+        
+        flask.g.room_id = room_id
         room = models.Room.query.filter_by(id=room_id).first()
         if room is None:
             current_app.logger.info(f"Room not found with ID {room_id}.")

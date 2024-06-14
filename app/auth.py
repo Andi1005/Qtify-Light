@@ -56,10 +56,10 @@ def auth_required(func):
             )
             return flask.redirect(flask.url_for("views.index"))
 
-        if room.expires_at < datetime.datetime.now():
-            current_app.logger.info(f"Tried to use expired room {room}.")
-            flask.flash("Der Raum ist abgelaufen (Error 410)", category="error")
-            return flask.redirect(flask.url_for("views.index"))
+        #if room.expires_at < datetime.datetime.now():
+        #    current_app.logger.info(f"Tried to use expired room {room}.")
+        #    flask.flash("Der Raum ist abgelaufen (Error 410)", category="error")
+        #    return flask.redirect(flask.url_for("views.index"))
 
         if room.token_expires_at < datetime.datetime.now():
             current_app.logger.info(f"Token expired in {room}.")

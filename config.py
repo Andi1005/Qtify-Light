@@ -43,6 +43,10 @@ class Production(BaseConfig):
 
     _DATABASE_PW = "Replace in Production"
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://QTify:{_DATABASE_PW}@QTify.mysql.eu.pythonanywhere-services.com/QTify$default"
+    SQLaLCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 1800,
+    }
 
     CLIENT_ID = "bbe5ddb14c964b0aa88307badeb3e3a0"
     CLIENT_SECRET = "Replace in Production"

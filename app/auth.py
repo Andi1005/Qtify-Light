@@ -45,7 +45,7 @@ def auth_required(func):
                 category="error",
             )
             return flask.redirect(flask.url_for("views.index"))
-        
+
         flask.g.room_id = room_id
         room = models.Room.query.filter_by(id=room_id).first()
         if room is None:
@@ -56,14 +56,14 @@ def auth_required(func):
             )
             return flask.redirect(flask.url_for("views.index"))
 
-        #if room.expires_at < datetime.datetime.now():
-        #    current_app.logger.info(f"Tried to use expired room {room}.")
-        #    flask.flash("Der Raum ist abgelaufen (Error 410)", category="error")
-        #    return flask.redirect(flask.url_for("views.index"))
+        if room.expires_at < datetime.datetime.now():
+            current_app.logger.info(f"Tried to use expired room {room}.")
+            flask.flash("Der Raum ist abgelaufen (Error 410)", category="error")
+            return flask.redirect(flask.url_for("views.index"))
 
         if room.token_expires_at < datetime.datetime.now():
             current_app.logger.info(f"Token expired in {room}.")
-            refresh_access_token()
+            refresh_access_token(room)
 
         flask.g.room = room
 
@@ -147,7 +147,7 @@ def callback():
         current_app.logger.info(
             f"Authorisation failed while requesting access token (From Spotify: {response.content})"
         )
-        
+
         flask.flash("Autorisierung fehlgeschlagen (Error 403)")
         return flask.redirect(flask.url_for("views.index"))
 
@@ -159,8 +159,6 @@ def callback():
     )
     models.db.session.add(new_room)
     models.db.session.commit()
-
-    print(response_data["access_token"])
 
     current_app.logger.info(f"New room created {new_room}")
 
@@ -199,12 +197,11 @@ def refresh_access_token(room: models.Room) -> None | Exception:
         )
 
     response_data = response.json()
+
+
     room.access_token = response_data["access_token"]
-    room.refresh_token = response_data["refresh_token"]
-    expires_in = datetime.timedelta(response_data["expires_in"])
-    room.token_expires_at = datetime.datetime.now() + datetime.timedelta(
-        seconds=expires_in
-    )
+    expires_in = datetime.timedelta(seconds=response_data["expires_in"])
+    room.token_expires_at = datetime.datetime.now() + expires_in
 
     models.db.session.commit()
 

@@ -8,7 +8,7 @@ import config
 
 def create_app():
     app = flask.Flask(__name__)
-    app.config.from_object(config.Debug)
+    app.config.from_object(config.Production)
 
     os.makedirs(app.instance_path, exist_ok=True)
     os.makedirs(os.path.join(app.instance_path, "qr-codes"), exist_ok=True)
@@ -35,4 +35,3 @@ app = create_app()
 if __name__ == "__main__":
     if "liveconsole" not in gethostname():
         app.run()
-        

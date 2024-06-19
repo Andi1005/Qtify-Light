@@ -179,10 +179,10 @@ def test(key):
 @bp.errorhandler(OperationalError)
 def handle_database_error(e):
     flask.flash("Etwas ist schiefgelaufen. Bitte versuche es erneut. (Error 503)", "error")
-    flask.current_app.logger.warning("Encountered Operational Error. From DB Api:\n" + e)
+    flask.current_app.logger.warning("Encountered Operational Error.")
 
     try:
         return flask.redirect(flask.url_for('views.room', room_id=flask.g.room_id))
-    
+
     except OperationalError:
         return flask.render_template("index.html")

@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import current_app
 import click
 
+ID_DIGITS = 6
+
 random.seed()
 db = SQLAlchemy()
 
@@ -19,7 +21,7 @@ class Room(db.Model):
     def __init__(self, access_token, token_expires_in, refresh_token):
 
         while True:
-            id = random.randrange(111111, 999999)
+            id = random.randrange(int("1" * ID_DIGITS), int("9" * ID_DIGITS))
             existing_room = Room.query.filter_by(id=id).first()
             if existing_room is None:
                 break
@@ -48,7 +50,9 @@ def tidy_db():
     counter = 0
     for room in Room.query.all():
         if room.expires_at < datetime.datetime.now():
-            os.remove(room.qr_code_path)
+            if room.qr_code_path is not None:
+                os.remove(room.qr_code_path)
+
             db.session.delete(room)
             counter += 1
 
